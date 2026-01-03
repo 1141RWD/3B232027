@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMEGA PC | 極致電競軍火庫</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <div class="rgb-border left-border"></div>
+    <div class="rgb-border right-border"></div>
+
+    <aside class="side-panel left-panel" id="leftPanel">
+        <button class="panel-toggle left-toggle" onclick="togglePanel('left')">◀</button>
+        
+        <div class="panel-content">
+            <div class="status-widget">
+                <div class="widget-title">產線實況</div>
+                <div class="status-indicator">
+                    <div class="traffic-light">
+                        <div id="light-red" class="light red"></div>
+                        <div id="light-yellow" class="light yellow"></div>
+                        <div id="light-green" class="light green active"></div>
+                    </div>
+                    <div class="status-text" id="statusText">產能充足</div>
+                </div>
+                <div class="queue-info">
+                    <p>排單：<span id="queueCount" class="highlight-num">12</span> 件</p>
+                    <p>預估：<span id="waitDays" class="highlight-num">24</span> hr</p>
+                </div>
+            </div>
+
+            <div class="nav-widget">
+                <div class="widget-title">快速跳轉</div>
+                <ul>
+                    <li onclick="scrollToId('section-home')">🏠 首頁大廳</li>
+                    <li onclick="scrollToId('section-promo')">🔥 品牌促銷</li>
+                    <li onclick="scrollToId('section-prebuilt')">💻 套裝主機</li>
+                    <li onclick="scrollToId('section-laptop')">🚀 電競筆電</li>
+                    <li onclick="scrollToId('section-builder')">🛠️ 線上估價</li>
+                    <li onclick="scrollToId('section-cart')">🛒 購物車</li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <aside class="side-panel right-panel" id="rightPanel">
+        <button class="panel-toggle right-toggle" onclick="togglePanel('right')">▶</button>
+
+        <div class="panel-content">
+            <div class="dashboard-widget">
+                <div class="widget-title">戰力儀表板</div>
+                
+                <div class="meter-box">
+                    <label>整機功耗 (TDP)</label>
+                    <div class="meter-bar-bg">
+                        <div id="wattBar" class="meter-bar-fill" style="width: 0%;"></div>
+                    </div>
+                    <div class="meter-value"><span id="totalWatts">0</span> W</div>
+                    <div id="psuSuggestion" class="meter-hint">建議電源：待選擇</div>
+                </div>
+
+                <hr class="dash-divider">
+
+                <div class="meter-box">
+                    <label>效能預估 (FPS)</label>
+                    <div class="fps-display">
+                        <span id="fpsScore">--</span>
+                    </div>
+                    <div id="fpsLabel" class="fps-label">請選擇顯卡</div>
+                </div>
+            </div>
+
+            <div class="side-ad">
+                <div class="ad-badge">HOT</div>
+                <h4>RTX 4090<br>現貨供應</h4>
+                <p>限時折 $2000</p>
+                <button onclick="switchSection('section-builder')">去搶購</button>
+            </div>
+            
+            <div class="side-tool" onclick="window.scrollTo({top:0, behavior:'smooth'})">TOP</div>
+        </div>
+    </aside>
+
+    <nav class="navbar">
+        <div class="logo">OMEGA <span>PC ARMORY</span></div>
+        <div class="nav-links">
+            <button onclick="switchSection('section-home')" class="nav-btn active">首頁公告</button>
+            <button onclick="switchSection('section-promo')" class="nav-btn">品牌促銷</button>
+            <button onclick="switchSection('section-prebuilt')" class="nav-btn">套裝主機</button>
+            <button onclick="switchSection('section-laptop')" class="nav-btn">電競筆電</button>
+            <button onclick="switchSection('section-builder')" class="nav-btn">線上估價</button>
+            <button onclick="switchSection('section-links')" class="nav-btn">參考資訊</button>
+        </div>
+        <div class="user-panel">
+            <div class="cart-icon" onclick="switchSection('section-cart')">
+                🛒 <span id="cartCount">0</span>
+            </div>
+            <span id="welcomeMsg"></span>
+            <button id="authBtn" class="btn-outline" onclick="toggleAuth()">會員登入</button>
+        </div>
+    </nav>
+
+    <section id="section-home" class="page-section active-section">
+        <div class="carousel-container">
+            <div class="carousel-track" id="carouselTrack">
+                </div>
+            <button class="carousel-btn prev" onclick="moveCarousel(-1)">&#10094;</button>
+            <button class="carousel-btn next" onclick="moveCarousel(1)">&#10095;</button>
+        </div>
+
+        <div class="store-locator">
+            <h2>📍 戰略據點 & 維修中心</h2>
+            <div class="store-buttons">
+                <button class="store-btn" onclick="toggleStore('tp')">台北旗艦店</button>
+                <button class="store-btn" onclick="toggleStore('tc')">台中概念店</button>
+                <button class="store-btn" onclick="toggleStore('tn')">台南體驗館</button>
+                <button class="store-btn repair" onclick="toggleStore('fix')">🛠️ 維修中心</button>
+            </div>
+            <div id="store-info-tp" class="store-info-box">
+                <h3>台北旗艦店</h3>
+                <p>地址：台北市中正區市民大道三段 8 號 1F</p>
+                <p>電話：02-2345-6789</p>
+            </div>
+            <div id="store-info-tc" class="store-info-box">
+                <h3>台中概念店</h3>
+                <p>地址：台中市西區英才路 508 號 2F</p>
+                <p>電話：04-2323-4567</p>
+            </div>
+            <div id="store-info-tn" class="store-info-box">
+                <h3>台南體驗館</h3>
+                <p>地址：台南市東區北門路一段 226 號</p>
+                <p>電話：06-211-1234</p>
+            </div>
+            <div id="store-info-fix" class="store-info-box repair-box">
+                <h3>全台維修中心</h3>
+                <p>北部/中部/南部皆有據點，24h 快速完修服務</p>
+                <p>服務時間：週一至週日 11:00 - 21:00</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="section-promo" class="page-section">
+        <div class="section-header">
+            <h2>🔥 限時軍火特賣</h2>
+            <p>戰術裝備組合，火力全開</p>
+        </div>
+        <div class="grid-container" id="promoGrid"></div>
+    </section>
+
+    <section id="section-prebuilt" class="page-section">
+        <div class="section-header">
+            <h2>💻 精選作戰主機</h2>
+            <p>嚴選配置，即插即戰</p>
+        </div>
+        <div class="grid-container" id="prebuiltGrid"></div>
+    </section>
+
+    <section id="section-laptop" class="page-section">
+        <div class="section-header">
+            <h2>🚀 機動戰術筆電</h2>
+            <p>輕薄與效能的極致平衡</p>
+        </div>
+        <div class="grid-container" id="laptopGrid"></div>
+    </section>
+
+    <section id="section-builder" class="page-section">
+        <div class="builder-container">
+            <div class="builder-toolbar">
+                <div class="search-box">
+                    <span class="icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="搜尋裝備型號..." onkeyup="filterProducts()">
+                </div>
+                <div class="toolbar-info">
+                    <small>系統提示：庫存即時連動，右側儀表板同步計算。</small>
+                </div>
+            </div>
+
+            <div class="builder-card">
+                <div class="builder-header">
+                    <div class="col-name">分類</div>
+                    <div class="col-select">裝備選擇 (顯示即時庫存)</div>
+                    <div class="col-qty">數量</div>
+                    <div class="col-price">小計</div>
+                </div>
+                <div id="builderRows"></div>
+            </div>
+
+            <div class="builder-footer">
+                <div class="total-info">
+                    估價總額: <span id="builderTotalPrice" class="price-highlight">$0</span>
+                </div>
+                <button class="btn-primary" onclick="addBuilderToCart()">加入補給車</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="section-links" class="page-section">
+        <div class="section-header"><h2>🔗 情報連結</h2></div>
+        <div class="links-container">
+            <a href="https://www.gigabyte.com/tw" target="_blank" class="link-card">
+                <h3>GIGABYTE 技嘉</h3>
+                <p>Team Up. Fight On.</p>
+            </a>
+            <a href="https://rog.asus.com/tw" target="_blank" class="link-card">
+                <h3>ASUS ROG</h3>
+                <p>Republic of Gamers</p>
+            </a>
+            <a href="https://www.coolpc.com.tw" target="_blank" class="link-card">
+                <h3>原價屋 Coolpc</h3>
+                <p>價格查詢與參考</p>
+            </a>
+        </div>
+    </section>
+
+    <section id="section-cart" class="page-section">
+        <div class="section-header"><h2>🛒 物資補給車</h2></div>
+        <div class="cart-container">
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>裝備內容</th>
+                        <th>類型</th>
+                        <th>單價</th>
+                        <th>數量</th>
+                        <th>小計</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="cartTableBody"></tbody>
+            </table>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    總金額: <span id="cartFinalTotal">$0</span>
+                </div>
+                <button class="btn-primary pulse-animation" onclick="openCheckoutModal()">確認結帳</button>
+            </div>
+        </div>
+    </section>
+
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('detailModal')">&times;</span>
+            <h2 id="dtTitle"></h2>
+            <div id="dtContent"></div>
+            <div class="pb-footer">
+                <h3 class="price-highlight" id="dtPrice"></h3>
+                <button class="btn-primary" id="dtBuyBtn">加入購物車</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content login-modal-style">
+            <span class="close-btn" onclick="closeModal('loginModal')">&times;</span>
+            <div class="login-header"><h2>身份驗證</h2><p>OMEGA MEMBER</p></div>
+            <input type="text" id="loginUser" value="user" class="input-modern" placeholder="Username">
+            <input type="password" id="loginPass" value="1234" class="input-modern" placeholder="Password">
+            <button class="btn-login" onclick="login()">登入系統</button>
+        </div>
+    </div>
+
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content large-modal">
+            <span class="close-btn" onclick="closeModal('checkoutModal')">&times;</span>
+            <h2 class="modal-title-bar">訂單確認</h2>
+            <div class="checkout-scroll-area">
+                <div class="checkout-section">
+                    <h3>1. 買家資訊</h3>
+                    <div class="form-grid">
+                        <input type="text" id="cxName" class="input-field" placeholder="收件人姓名">
+                        <input type="tel" id="cxPhone" class="input-field" placeholder="聯絡電話">
+                        <input type="text" id="cxAddr" class="input-field full-row" placeholder="配送地址">
+                        <textarea id="cxNote" class="input-field full-row" placeholder="訂單備註 (選填)"></textarea>
+                    </div>
+                </div>
+                <hr class="divider">
+                <div class="checkout-section">
+                    <h3>2. 裝備清單</h3>
+                    <div id="orderSummaryContent" class="order-summary-box"></div>
+                </div>
+                <hr class="divider">
+                <div class="checkout-section">
+                    <h3>3. 付款詳情</h3>
+                    <div class="payment-box">
+                        <div class="summary-line">總金額: <span class="big-price" id="checkoutFinalTotal">$0</span></div>
+                        <select id="installmentSelect" class="input-field" onchange="calculateInstallment()">
+                            <option value="1">一次付清</option>
+                            <option value="3">3 期 0% 利率</option>
+                            <option value="6">6 期 0% 利率</option>
+                            <option value="12">12 期 (3% 利率)</option>
+                            <option value="24">24 期 (5% 利率)</option>
+                        </select>
+                        <div id="installmentResult"></div>
+                    </div>
+                </div>
+                <button class="btn-success full-width" onclick="submitOrder()">確認送出訂單</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">訊息</div>
+
+    <script src="index.js"></script>
+</body>
+</html>
