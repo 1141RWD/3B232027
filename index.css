@@ -684,3 +684,141 @@ body {
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
     margin: 25px 0;
 }
+
+/* =========================================
+   📱 手機版 RWD 強制修正 (Mobile Responsive)
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    /* 1. 隱藏側邊欄與 RGB 燈條 (手機螢幕太小，放不下這些) */
+    .side-panel, .rgb-border, .panel-toggle {
+        display: none !important;
+    }
+
+    /* 2. 調整中間內容寬度 (手機要滿版才清楚) */
+    .page-section {
+        max-width: 100% !important;
+        padding: 20px 15px; /* 左右留一點縫隙 */
+        margin: 0;
+    }
+
+    /* 3. 商品列表：強制改為「一排 1 個」 (直式排列) */
+    .grid-container {
+        grid-template-columns: 1fr !important; /* 強制覆寫原本的 3 欄 */
+        gap: 20px;
+    }
+
+    /* 4. 導覽列 (Navbar) 調整 */
+    .navbar {
+        padding: 0 10px;
+        height: auto;
+        flex-direction: column; /* 上下排列 */
+        gap: 10px;
+        padding-bottom: 10px;
+    }
+    .nav-links {
+        width: 100%;
+        display: flex;
+        overflow-x: auto; /* 允許左右滑動 */
+        white-space: nowrap; /* 防止按鈕換行 */
+        padding-bottom: 5px;
+        gap: 0;
+    }
+    .nav-btn {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+        height: 50px;
+        flex-shrink: 0; /* 防止按鈕被壓扁 */
+    }
+    .user-panel {
+        width: 100%;
+        justify-content: flex-end; /* 靠右對齊 */
+        padding-right: 10px;
+    }
+    .logo {
+        margin-top: 10px;
+        font-size: 1.5rem;
+    }
+
+    /* 5. 估價單 (Builder) 與 購物車表格：變成卡片式堆疊 */
+    /* 因為手機無法顯示橫向表格，我們把它變成直的看 */
+    
+    /* 隱藏表格標題列 */
+    .builder-header, .cart-table thead {
+        display: none !important; 
+    }
+
+    /* 每一列變成一個獨立的小卡片 */
+    .builder-row, .cart-table tr {
+        display: flex;
+        flex-direction: column; /* 上下排列 */
+        background: white;
+        margin-bottom: 15px;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        position: relative;
+    }
+    
+    /* 購物車的 td 改成區塊顯示 */
+    .cart-table td {
+        display: block;
+        padding: 5px 0;
+        border: none;
+        text-align: right; /* 內容靠右 */
+    }
+    /* 手動補上欄位名稱 (偽元素技巧) */
+    .cart-table td:nth-child(1) { text-align: left; font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; } /* 品名 */
+    .cart-table td:nth-child(3)::before { content: '單價：'; color: #888; float: left;}
+    .cart-table td:nth-child(4)::before { content: '數量：'; color: #888; float: left;}
+    .cart-table td:nth-child(5)::before { content: '小計：'; color: #888; float: left;}
+
+    /* 估價單欄位調整 */
+    .builder-row {
+        gap: 10px;
+    }
+    .col-name {
+        color: #222;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+    .col-price {
+        text-align: right;
+        font-size: 1.2rem;
+        color: var(--accent);
+    }
+    /* 數量輸入框放寬 */
+    .col-qty, .col-qty input {
+        width: 100% !important;
+    }
+
+    /* 6. 輪播高度縮小 */
+    .carousel-container {
+        height: 250px; /* 手機不需要太高 */
+    }
+
+    /* 7. 彈出視窗 (Modal) 滿版 */
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+        padding: 20px;
+        max-height: 80vh;
+    }
+    .form-grid {
+        grid-template-columns: 1fr; /* 表單變單欄 */
+    }
+    .full-row { grid-column: span 1; }
+    
+    /* 8. 門市按鈕變成直排 */
+    .store-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    .store-btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
